@@ -1,591 +1,700 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Task Bot Admin Panel</title>
 
-    <title>Task Bot Admin Panel</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#f4f7fb;color:#222}
+.hidden{display:none!important}
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
-        }
+#loginPage{
+min-height:100vh;display:flex;align-items:center;justify-content:center;
+padding:20px;background:linear-gradient(135deg,#6c5ce7,#0984e3)
+}
+.login-box{
+width:100%;max-width:400px;background:white;padding:30px;
+border-radius:20px;box-shadow:0 10px 35px rgba(0,0,0,.2)
+}
+.login-box h1{text-align:center;margin-bottom:8px}
+.login-box p{text-align:center;color:#666;margin-bottom:25px}
+input,textarea,select{
+width:100%;padding:13px;margin:7px 0;border:1px solid #ddd;
+border-radius:9px;font-size:15px
+}
+textarea{min-height:100px;resize:vertical}
+button{
+border:0;border-radius:9px;padding:12px 16px;cursor:pointer;font-size:15px
+}
+.login-btn,.primary{background:#6c5ce7;color:white}
+.danger{background:#e74c3c;color:white}
+.success{background:#00b894;color:white}
+.secondary{background:#dfe6e9;color:#222}
 
-        body {
-            background: #f4f7fb;
-            color: #222;
-        }
+#loginMessage{margin-top:10px;text-align:center;color:#e74c3c}
 
-        .hidden {
-            display: none !important;
-        }
+header{
+background:linear-gradient(135deg,#6c5ce7,#0984e3);
+color:white;padding:18px 20px
+}
+.header-inner{
+max-width:1100px;margin:auto;display:flex;
+align-items:center;justify-content:space-between
+}
+header h1{font-size:22px}
+header p{margin-top:5px;opacity:.9}
+.logout-btn{background:white;color:#6c5ce7;font-weight:bold}
 
-        /* LOGIN */
-        #loginPage {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            background: linear-gradient(135deg, #6c5ce7, #0984e3);
-        }
+.container{max-width:1100px;margin:auto;padding:20px}
 
-        .login-box {
-            width: 100%;
-            max-width: 400px;
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 35px rgba(0,0,0,0.2);
-        }
+.cards{
+display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;margin-bottom:20px
+}
+.card{
+background:white;padding:20px;border-radius:15px;
+box-shadow:0 4px 15px rgba(0,0,0,.08)
+}
+.card h3{font-size:15px;color:#666}
+.card strong{display:block;font-size:28px;margin-top:8px}
 
-        .login-box h1 {
-            text-align: center;
-            margin-bottom: 8px;
-        }
+.menu{
+display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+gap:12px;margin-bottom:20px
+}
+.menu button{
+background:white;box-shadow:0 4px 12px rgba(0,0,0,.07)
+}
 
-        .login-box p {
-            text-align: center;
-            color: #666;
-            margin-bottom: 25px;
-        }
+.section{
+background:white;margin-top:20px;padding:20px;border-radius:15px;
+box-shadow:0 4px 15px rgba(0,0,0,.08)
+}
 
-        .login-box input {
-            width: 100%;
-            padding: 14px;
-            margin-bottom: 12px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            font-size: 15px;
-            outline: none;
-        }
+.task-form{
+background:#f8f9fa;padding:15px;border-radius:12px;margin-top:15px
+}
 
-        .login-box input:focus {
-            border-color: #6c5ce7;
-        }
+.task{
+border:1px solid #eee;padding:15px;border-radius:12px;margin-top:12px
+}
+.task h3{margin-bottom:8px}
+.task p{color:#555;margin-bottom:8px}
+.task-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
 
-        .login-btn {
-            width: 100%;
-            border: none;
-            padding: 14px;
-            border-radius: 10px;
-            background: #6c5ce7;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
+.status{
+margin-top:12px;padding:10px;border-radius:8px;background:#f1f2f6
+}
 
-        .login-btn:hover {
-            opacity: 0.9;
-        }
-
-        #loginMessage {
-            margin-top: 12px;
-            text-align: center;
-            color: #e74c3c;
-            font-size: 14px;
-        }
-
-        /* HEADER */
-        header {
-            background: linear-gradient(135deg, #6c5ce7, #0984e3);
-            color: white;
-            padding: 18px 20px;
-        }
-
-        .header-inner {
-            max-width: 1100px;
-            margin: auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-        }
-
-        header h1 {
-            font-size: 22px;
-        }
-
-        header p {
-            margin-top: 5px;
-            opacity: 0.9;
-        }
-
-        .logout-btn {
-            border: none;
-            background: white;
-            color: #6c5ce7;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        /* MAIN */
-        .container {
-            max-width: 1100px;
-            margin: auto;
-            padding: 20px;
-        }
-
-        .cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
-        }
-
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-
-        .card h3 {
-            font-size: 15px;
-            color: #666;
-        }
-
-        .card strong {
-            display: block;
-            font-size: 28px;
-            margin-top: 8px;
-        }
-
-        .menu {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 12px;
-        }
-
-        .menu button {
-            border: none;
-            padding: 18px;
-            border-radius: 12px;
-            background: white;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.07);
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .section {
-            background: white;
-            margin-top: 25px;
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-
-        .status {
-            margin-top: 12px;
-            padding: 10px;
-            border-radius: 8px;
-            background: #f1f2f6;
-        }
-
-        @media (max-width: 600px) {
-            .header-inner {
-                align-items: flex-start;
-            }
-
-            header h1 {
-                font-size: 19px;
-            }
-
-            .logout-btn {
-                padding: 8px 10px;
-            }
-        }
-    </style>
+@media(max-width:600px){
+.header-inner{align-items:flex-start;gap:10px}
+header h1{font-size:18px}
+}
+</style>
 </head>
 
 <body>
 
-<!-- LOGIN PAGE -->
+<!-- LOGIN -->
+
 <div id="loginPage">
 
-    <div class="login-box">
+<div class="login-box">
 
-        <h1>🔐 Admin Login</h1>
+<h1>🔐 Admin Login</h1>
+<p>Task Bot Admin Panel</p>
 
-        <p>Task Bot Admin Panel</p>
+<input id="email" type="email" placeholder="Admin Email">
+<input id="password" type="password" placeholder="Password">
 
-        <input
-            type="email"
-            id="email"
-            placeholder="Admin Email"
-            autocomplete="email"
-        >
+<button class="login-btn" style="width:100%" onclick="login()">
+Login
+</button>
 
-        <input
-            type="password"
-            id="password"
-            placeholder="Password"
-            autocomplete="current-password"
-        >
+<div id="loginMessage"></div>
 
-        <button class="login-btn" onclick="login()">
-            Login
-        </button>
+</div>
+</div>
 
-        <div id="loginMessage"></div>
 
-    </div>
+<!-- ADMIN -->
+
+<div id="adminPage" class="hidden">
+
+<header>
+<div class="header-inner">
+
+<div>
+<h1>🤖 Task Bot Admin Panel</h1>
+<p>সম্পূর্ণ Bot Control Center</p>
+</div>
+
+<button class="logout-btn" onclick="logout()">🚪 Logout</button>
+
+</div>
+</header>
+
+
+<div class="container">
+
+<!-- DASHBOARD -->
+
+<div class="cards">
+
+<div class="card">
+<h3>👤 Total Users</h3>
+<strong id="usersCount">...</strong>
+</div>
+
+<div class="card">
+<h3>📋 Total Tasks</h3>
+<strong id="tasksCount">...</strong>
+</div>
+
+<div class="card">
+<h3>⏳ Pending Submissions</h3>
+<strong id="submissionsCount">...</strong>
+</div>
+
+<div class="card">
+<h3>💸 Pending Withdrawals</h3>
+<strong id="withdrawalsCount">...</strong>
+</div>
 
 </div>
 
 
-<!-- ADMIN PANEL -->
-<div id="adminPage" class="hidden">
+<!-- MENU -->
 
-    <header>
+<div class="menu">
 
-        <div class="header-inner">
+<button onclick="showSection('tasksSection')">
+📋 Task Management
+</button>
 
-            <div>
-                <h1>🤖 Task Bot Admin Panel</h1>
-                <p>সম্পূর্ণ Bot Control Center</p>
-            </div>
+<button onclick="alert('User Management পরে চালু করা হবে')">
+👤 User Management
+</button>
 
-            <button class="logout-btn" onclick="logout()">
-                🚪 Logout
-            </button>
+<button onclick="alert('Task Submissions পরে চালু করা হবে')">
+📤 Task Submissions
+</button>
 
-        </div>
+<button onclick="alert('Withdrawals পরে চালু করা হবে')">
+💸 Withdrawals
+</button>
 
-    </header>
+<button onclick="alert('Notice System পরে চালু করা হবে')">
+📢 Send Notice
+</button>
 
+<button onclick="alert('Bot Settings পরে চালু করা হবে')">
+⚙️ Bot Settings
+</button>
 
-    <div class="container">
-
-        <div class="cards">
-
-            <div class="card">
-                <h3>👤 Total Users</h3>
-                <strong id="usersCount">...</strong>
-            </div>
-
-            <div class="card">
-                <h3>📋 Total Tasks</h3>
-                <strong id="tasksCount">...</strong>
-            </div>
-
-            <div class="card">
-                <h3>⏳ Pending Submissions</h3>
-                <strong id="submissionsCount">...</strong>
-            </div>
-
-            <div class="card">
-                <h3>💸 Pending Withdrawals</h3>
-                <strong id="withdrawalsCount">...</strong>
-            </div>
-
-        </div>
+</div>
 
 
-        <div class="menu">
+<!-- TASK MANAGEMENT -->
 
-            <button>📋 Task Management</button>
+<div id="tasksSection" class="section hidden">
 
-            <button>👤 User Management</button>
+<h2>📋 Task Management</h2>
 
-            <button>📤 Task Submissions</button>
+<div class="task-form">
 
-            <button>💸 Withdrawals</button>
+<h3>➕ নতুন Task যোগ করুন</h3>
 
-            <button>📢 Send Notice</button>
+<input id="taskTitle" placeholder="Task Title">
 
-            <button>⚙️ Bot Settings</button>
+<textarea id="taskDescription"
+placeholder="Task Description"></textarea>
 
-        </div>
+<input id="taskReward"
+type="number"
+step="0.01"
+placeholder="Reward">
+
+<select id="taskStatus">
+<option value="active">Active</option>
+<option value="inactive">Inactive</option>
+</select>
+
+<button class="primary" onclick="addTask()">
+➕ Add Task
+</button>
+
+</div>
 
 
-        <div class="section">
+<div style="margin-top:25px">
 
-            <h2>📊 Admin Dashboard</h2>
+<h3>📋 সব Task</h3>
 
-            <p>
-                এখান থেকে পরে তোমার পুরো Telegram Bot নিয়ন্ত্রণ করা যাবে।
-            </p>
+<div id="taskList">
+⏳ Loading...
+</div>
 
-            <div class="status" id="status">
-                Dashboard লোড হচ্ছে...
-            </div>
+</div>
 
-        </div>
+</div>
 
-    </div>
 
+<div class="section">
+
+<h2>📊 System Status</h2>
+
+<div class="status" id="status">
+Dashboard লোড হচ্ছে...
+</div>
+
+</div>
+
+</div>
 </div>
 
 
 <script>
 
-/* ================================
-   SUPABASE CONFIG
-================================ */
+/* ==============================
+SUPABASE
+============================== */
 
 const SUPABASE_URL =
-    "https://mgqfnmoxwgwqdltyxuib.supabase.co";
+"https://mgqfnmoxwgwqdltyxuib.supabase.co";
 
 const SUPABASE_KEY =
-    "sb_publishable_raLuMUgN6662PQJzayNhtg_x_C8KICm";
-
+"sb_publishable_raLuMUgN6662PQJzayNhtg_x_C8KICm";
 
 const supabaseClient =
-    window.supabase.createClient(
-        SUPABASE_URL,
-        SUPABASE_KEY
-    );
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_KEY
+);
 
 
-/* ================================
-   LOGIN
-================================ */
+/* ==============================
+LOGIN
+============================== */
 
-async function login() {
+async function login(){
 
-    const email =
-        document.getElementById("email").value.trim();
+const email =
+document.getElementById("email").value.trim();
 
-    const password =
-        document.getElementById("password").value;
+const password =
+document.getElementById("password").value;
 
-    const message =
-        document.getElementById("loginMessage");
+const message =
+document.getElementById("loginMessage");
 
+if(!email || !password){
+message.textContent="❌ Email এবং Password দিন।";
+return;
+}
 
-    if (!email || !password) {
+message.textContent="⏳ Login হচ্ছে...";
 
-        message.textContent =
-            "❌ Email এবং Password দিন।";
+const {error} =
+await supabaseClient.auth.signInWithPassword({
+email,
+password
+});
 
-        return;
-    }
+if(error){
+message.textContent="❌ Login ব্যর্থ: "+error.message;
+return;
+}
 
+message.textContent="";
 
-    message.textContent =
-        "⏳ Login হচ্ছে...";
-
-
-    const { data, error } =
-        await supabaseClient.auth.signInWithPassword({
-            email: email,
-            password: password
-        });
-
-
-    if (error) {
-
-        message.textContent =
-            "❌ Login ব্যর্থ: " + error.message;
-
-        return;
-    }
-
-
-    message.textContent = "";
-
-    showAdminPanel();
+showAdmin();
 
 }
 
 
-/* ================================
-   LOGOUT
-================================ */
+/* ==============================
+LOGOUT
+============================== */
 
-async function logout() {
+async function logout(){
 
-    await supabaseClient.auth.signOut();
+await supabaseClient.auth.signOut();
 
-    document
-        .getElementById("adminPage")
-        .classList.add("hidden");
-
-    document
-        .getElementById("loginPage")
-        .classList.remove("hidden");
-
-    document.getElementById("email").value = "";
-
-    document.getElementById("password").value = "";
+location.reload();
 
 }
 
 
-/* ================================
-   SHOW ADMIN PANEL
-================================ */
+/* ==============================
+SHOW ADMIN
+============================== */
 
-function showAdminPanel() {
+function showAdmin(){
 
-    document
-        .getElementById("loginPage")
-        .classList.add("hidden");
+document
+.getElementById("loginPage")
+.classList.add("hidden");
 
-    document
-        .getElementById("adminPage")
-        .classList.remove("hidden");
+document
+.getElementById("adminPage")
+.classList.remove("hidden");
 
-    loadDashboard();
-
-}
-
-
-/* ================================
-   GET TABLE COUNT
-================================ */
-
-async function getCount(table, filter = "") {
-
-    const response = await fetch(
-        `${SUPABASE_URL}/rest/v1/${table}?select=id${filter}`,
-        {
-            method: "GET",
-
-            headers: {
-                "apikey": SUPABASE_KEY,
-
-                "Authorization":
-                    `Bearer ${SUPABASE_KEY}`
-            }
-        }
-    );
-
-
-    if (!response.ok) {
-
-        throw new Error(
-            `${table} থেকে data পাওয়া যায়নি`
-        );
-
-    }
-
-
-    const data =
-        await response.json();
-
-
-    return data.length;
+loadDashboard();
 
 }
 
 
-/* ================================
-   DASHBOARD
-================================ */
+/* ==============================
+COUNT
+============================== */
 
-async function loadDashboard() {
+async function getCount(table,filter=""){
 
-    const status =
-        document.getElementById("status");
+const response =
+await fetch(
+`${SUPABASE_URL}/rest/v1/${table}?select=id${filter}`,
+{
+headers:{
+apikey:SUPABASE_KEY,
+Authorization:`Bearer ${SUPABASE_KEY}`
+}
+});
 
+if(!response.ok){
+throw new Error(table+" error");
+}
 
-    status.textContent =
-        "⏳ Database থেকে data নেওয়া হচ্ছে...";
+const data=await response.json();
 
-
-    try {
-
-        const users =
-            await getCount("users");
-
-
-        const tasks =
-            await getCount("tasks");
-
-
-        const submissions =
-            await getCount(
-                "task_submissions",
-                "&status=eq.pending"
-            );
-
-
-        const withdrawals =
-            await getCount(
-                "withdrawals",
-                "&status=eq.pending"
-            );
-
-
-        document.getElementById(
-            "usersCount"
-        ).textContent = users;
-
-
-        document.getElementById(
-            "tasksCount"
-        ).textContent = tasks;
-
-
-        document.getElementById(
-            "submissionsCount"
-        ).textContent = submissions;
-
-
-        document.getElementById(
-            "withdrawalsCount"
-        ).textContent = withdrawals;
-
-
-        status.textContent =
-            "✅ Supabase-এর সাথে সংযোগ সফল হয়েছে।";
-
-
-    } catch (error) {
-
-        console.error(error);
-
-
-        status.textContent =
-            "❌ Database থেকে data পাওয়া যায়নি। RLS/Permission পরীক্ষা করতে হবে।";
-
-    }
+return data.length;
 
 }
 
 
-/* ================================
-   CHECK EXISTING LOGIN
-================================ */
+/* ==============================
+DASHBOARD
+============================== */
 
-async function checkLogin() {
+async function loadDashboard(){
 
-    const {
-        data: {
-            session
-        }
-    } = await supabaseClient.auth.getSession();
+try{
 
+const users =
+await getCount("users");
 
-    if (session) {
+const tasks =
+await getCount("tasks");
 
-        showAdminPanel();
+const submissions =
+await getCount(
+"task_submissions",
+"&status=eq.pending"
+);
 
-    } else {
+const withdrawals =
+await getCount(
+"withdrawals",
+"&status=eq.pending"
+);
 
-        document
-            .getElementById("loginPage")
-            .classList.remove("hidden");
+document.getElementById("usersCount")
+.textContent=users;
 
-        document
-            .getElementById("adminPage")
-            .classList.add("hidden");
+document.getElementById("tasksCount")
+.textContent=tasks;
 
-    }
+document.getElementById("submissionsCount")
+.textContent=submissions;
+
+document.getElementById("withdrawalsCount")
+.textContent=withdrawals;
+
+document.getElementById("status")
+.textContent=
+"✅ Database connection successful.";
+
+}catch(error){
+
+console.error(error);
+
+document.getElementById("status")
+.textContent=
+"❌ Database error. RLS/Policy পরীক্ষা করুন.";
+
+}
 
 }
 
 
-checkLogin();
+/* ==============================
+SHOW SECTION
+============================== */
+
+function showSection(id){
+
+document
+.getElementById(id)
+.classList.remove("hidden");
+
+loadTasks();
+
+}
+
+
+/* ==============================
+ADD TASK
+============================== */
+
+async function addTask(){
+
+const title =
+document.getElementById("taskTitle").value.trim();
+
+const description =
+document.getElementById("taskDescription").value.trim();
+
+const reward =
+document.getElementById("taskReward").value;
+
+const status =
+document.getElementById("taskStatus").value;
+
+if(!title || !description || !reward){
+
+alert("❌ সব তথ্য পূরণ করুন।");
+
+return;
+
+}
+
+const {
+data:{user}
+} =
+await supabaseClient.auth.getUser();
+
+if(!user){
+
+alert("❌ Admin Login প্রয়োজন।");
+
+return;
+
+}
+
+const {error} =
+await supabaseClient
+.from("tasks")
+.insert({
+title:title,
+description:description,
+reward:Number(reward),
+status:status
+});
+
+if(error){
+
+alert("❌ Task যোগ হয়নি: "+error.message);
+
+return;
+
+}
+
+alert("✅ Task সফলভাবে যোগ হয়েছে।");
+
+document.getElementById("taskTitle").value="";
+document.getElementById("taskDescription").value="";
+document.getElementById("taskReward").value="";
+
+loadTasks();
+loadDashboard();
+
+}
+
+
+/* ==============================
+LOAD TASKS
+============================== */
+
+async function loadTasks(){
+
+const taskList =
+document.getElementById("taskList");
+
+taskList.innerHTML="⏳ Loading...";
+
+const {
+data,
+error
+} =
+await supabaseClient
+.from("tasks")
+.select("*")
+.order("id",{ascending:false});
+
+if(error){
+
+taskList.innerHTML=
+"❌ Task load হয়নি: "+error.message;
+
+return;
+
+}
+
+if(!data || data.length===0){
+
+taskList.innerHTML=
+"কোনো Task নেই।";
+
+return;
+
+}
+
+taskList.innerHTML="";
+
+data.forEach(task=>{
+
+const div =
+document.createElement("div");
+
+div.className="task";
+
+div.innerHTML=`
+
+<h3>📌 ${escapeHtml(task.title)}</h3>
+
+<p>${escapeHtml(task.description)}</p>
+
+<p><b>💰 Reward:</b> ${task.reward}</p>
+
+<p><b>📌 Status:</b> ${task.status}</p>
+
+<div class="task-actions">
+
+<button class="success"
+onclick="toggleTask('${task.id}','${task.status}')">
+${task.status==="active" ? "🔴 Deactivate" : "🟢 Activate"}
+</button>
+
+<button class="danger"
+onclick="deleteTask('${task.id}')">
+🗑️ Delete
+</button>
+
+</div>
+`;
+
+taskList.appendChild(div);
+
+});
+
+}
+
+
+/* ==============================
+TOGGLE TASK
+============================== */
+
+async function toggleTask(id,status){
+
+const newStatus =
+status==="active"
+? "inactive"
+: "active";
+
+const {error} =
+await supabaseClient
+.from("tasks")
+.update({status:newStatus})
+.eq("id",id);
+
+if(error){
+
+alert("❌ Status পরিবর্তন হয়নি: "+error.message);
+
+return;
+
+}
+
+loadTasks();
+
+}
+
+
+/* ==============================
+DELETE TASK
+============================== */
+
+async function deleteTask(id){
+
+if(!confirm("এই Task মুছে ফেলতে চান?")){
+
+return;
+
+}
+
+const {error} =
+await supabaseClient
+.from("tasks")
+.delete()
+.eq("id",id);
+
+if(error){
+
+alert("❌ Task delete হয়নি: "+error.message);
+
+return;
+
+}
+
+alert("✅ Task deleted.");
+
+loadTasks();
+loadDashboard();
+
+}
+
+
+/* ==============================
+ESCAPE HTML
+============================== */
+
+function escapeHtml(value){
+
+return String(value)
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+/* ==============================
+CHECK SESSION
+============================== */
+
+async function checkSession(){
+
+const {
+data:{session}
+} =
+await supabaseClient.auth.getSession();
+
+if(session){
+
+showAdmin();
+
+}
+
+}
+
+
+checkSession();
 
 </script>
 
