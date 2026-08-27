@@ -3,253 +3,895 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Task Bot Admin Panel</title>
+<title>Task Bot - Super Admin Panel</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
-*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
-body{background:#f4f7fb;color:#222}
-.hidden{display:none!important}
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif
+}
+
+body{
+  background:#f4f7fb;
+  color:#222
+}
+
+.hidden{
+  display:none!important
+}
+
+button{
+  border:0;
+  cursor:pointer
+}
+
+/* LOGIN */
 
 #loginPage{
-min-height:100vh;display:flex;align-items:center;justify-content:center;
-padding:20px;background:linear-gradient(135deg,#6c5ce7,#0984e3)
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:linear-gradient(135deg,#6c5ce7,#0984e3)
 }
-.login-box{
-width:100%;max-width:400px;background:white;padding:30px;
-border-radius:20px;box-shadow:0 10px 35px rgba(0,0,0,.2)
-}
-.login-box h1{text-align:center;margin-bottom:8px}
-.login-box p{text-align:center;color:#666;margin-bottom:25px}
-input,textarea,select{
-width:100%;padding:13px;margin:7px 0;border:1px solid #ddd;
-border-radius:9px;font-size:15px
-}
-textarea{min-height:100px;resize:vertical}
-button{
-border:0;border-radius:9px;padding:12px 16px;cursor:pointer;font-size:15px
-}
-.login-btn,.primary{background:#6c5ce7;color:white}
-.danger{background:#e74c3c;color:white}
-.success{background:#00b894;color:white}
-.secondary{background:#dfe6e9;color:#222}
 
-#loginMessage{margin-top:10px;text-align:center;color:#e74c3c}
+.login-box{
+  width:100%;
+  max-width:400px;
+  background:#fff;
+  padding:30px;
+  border-radius:20px;
+  box-shadow:0 10px 35px rgba(0,0,0,.2)
+}
+
+.login-box h1{
+  text-align:center;
+  margin-bottom:8px
+}
+
+.login-box p{
+  text-align:center;
+  color:#666;
+  margin-bottom:20px
+}
+
+input,textarea,select{
+  width:100%;
+  padding:13px;
+  margin:7px 0;
+  border:1px solid #ddd;
+  border-radius:9px;
+  font-size:15px
+}
+
+textarea{
+  min-height:100px;
+  resize:vertical
+}
+
+.login-btn{
+  width:100%;
+  padding:13px;
+  background:#6c5ce7;
+  color:#fff;
+  border-radius:9px;
+  font-size:16px
+}
+
+#loginMessage{
+  margin-top:10px;
+  text-align:center
+}
+
+/* HEADER */
 
 header{
-background:linear-gradient(135deg,#6c5ce7,#0984e3);
-color:white;padding:18px 20px
+  background:linear-gradient(135deg,#6c5ce7,#0984e3);
+  color:#fff;
+  padding:18px
 }
-.header-inner{
-max-width:1100px;margin:auto;display:flex;
-align-items:center;justify-content:space-between
-}
-header h1{font-size:22px}
-header p{margin-top:5px;opacity:.9}
-.logout-btn{background:white;color:#6c5ce7;font-weight:bold}
 
-.container{max-width:1100px;margin:auto;padding:20px}
+.header-inner{
+  max-width:1200px;
+  margin:auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px
+}
+
+.logout{
+  background:#fff;
+  color:#6c5ce7;
+  padding:11px 15px;
+  border-radius:9px;
+  font-weight:bold
+}
+
+/* CONTAINER */
+
+.container{
+  max-width:1200px;
+  margin:auto;
+  padding:20px
+}
+
+/* CARDS */
 
 .cards{
-display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-gap:15px;margin-bottom:20px
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:15px;
+  margin-bottom:20px
 }
+
 .card{
-background:white;padding:20px;border-radius:15px;
-box-shadow:0 4px 15px rgba(0,0,0,.08)
-}
-.card h3{font-size:15px;color:#666}
-.card strong{display:block;font-size:28px;margin-top:8px}
-
-.menu{
-display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
-gap:12px;margin-bottom:20px
-}
-.menu button{
-background:white;box-shadow:0 4px 12px rgba(0,0,0,.07)
+  background:#fff;
+  padding:20px;
+  border-radius:15px;
+  box-shadow:0 4px 15px rgba(0,0,0,.08)
 }
 
-.section{
-background:white;margin-top:20px;padding:20px;border-radius:15px;
-box-shadow:0 4px 15px rgba(0,0,0,.08)
+.card h3{
+  color:#666;
+  font-size:15px
 }
 
-.task-form{
-background:#f8f9fa;padding:15px;border-radius:12px;margin-top:15px
+.card strong{
+  display:block;
+  font-size:28px;
+  margin-top:8px
 }
+
+/* CATEGORY */
+
+.category{
+  background:#fff;
+  border-radius:15px;
+  margin-bottom:18px;
+  box-shadow:0 4px 15px rgba(0,0,0,.07);
+  overflow:hidden
+}
+
+.category-title{
+  padding:17px;
+  color:#fff;
+  background:linear-gradient(135deg,#6c5ce7,#0984e3);
+  font-size:18px;
+  font-weight:bold
+}
+
+.feature-grid{
+  padding:15px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:10px
+}
+
+.feature-btn{
+  min-height:58px;
+  background:#f8f9fa;
+  border:1px solid #e5e5e5;
+  border-radius:10px;
+  padding:10px;
+  text-align:left;
+  font-size:14px;
+  transition:.2s
+}
+
+.feature-btn:hover{
+  transform:translateY(-2px);
+  box-shadow:0 4px 12px rgba(0,0,0,.12);
+  background:#fff
+}
+
+/* PANEL */
+
+.panel{
+  background:#fff;
+  padding:20px;
+  border-radius:15px;
+  margin-bottom:20px;
+  box-shadow:0 4px 15px rgba(0,0,0,.08)
+}
+
+.panel h2{
+  margin-bottom:12px
+}
+
+.action-row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:10px
+}
+
+.primary{
+  background:#6c5ce7;
+  color:#fff;
+  padding:11px 15px;
+  border-radius:8px
+}
+
+.success{
+  background:#00b894;
+  color:#fff;
+  padding:11px 15px;
+  border-radius:8px
+}
+
+.danger{
+  background:#e74c3c;
+  color:#fff;
+  padding:11px 15px;
+  border-radius:8px
+}
+
+.secondary{
+  background:#dfe6e9;
+  padding:11px 15px;
+  border-radius:8px
+}
+
+.result{
+  background:#f1f2f6;
+  padding:12px;
+  border-radius:9px;
+  margin-top:12px;
+  white-space:pre-wrap
+}
+
+/* TASK */
 
 .task{
-border:1px solid #eee;padding:15px;border-radius:12px;margin-top:12px
+  border:1px solid #eee;
+  padding:15px;
+  border-radius:12px;
+  margin-top:10px
 }
-.task h3{margin-bottom:8px}
-.task p{color:#555;margin-bottom:8px}
-.task-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+
+.task-actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:10px
+}
 
 .status{
-margin-top:12px;padding:10px;border-radius:8px;background:#f1f2f6
+  margin-top:15px;
+  padding:12px;
+  border-radius:9px;
+  background:#f1f2f6
 }
 
 @media(max-width:600px){
-.header-inner{align-items:flex-start;gap:10px}
-header h1{font-size:18px}
+  .header-inner{
+    align-items:flex-start
+  }
+
+  .feature-grid{
+    grid-template-columns:1fr
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- LOGIN -->
+<!-- ================= LOGIN ================= -->
 
 <div id="loginPage">
 
-<div class="login-box">
+  <div class="login-box">
 
-<h1>🔐 Admin Login</h1>
-<p>Task Bot Admin Panel</p>
+    <h1>🔐 Admin Login</h1>
 
-<input id="email" type="email" placeholder="Admin Email">
-<input id="password" type="password" placeholder="Password">
+    <p>Task Bot Super Admin Panel</p>
 
-<button class="login-btn" style="width:100%" onclick="login()">
-Login
-</button>
+    <input id="email"
+           type="email"
+           placeholder="Admin Email">
 
-<div id="loginMessage"></div>
+    <input id="password"
+           type="password"
+           placeholder="Password">
+
+    <button class="login-btn"
+            onclick="login()">
+      Login
+    </button>
+
+    <div id="loginMessage"></div>
+
+  </div>
 
 </div>
-</div>
 
 
-<!-- ADMIN -->
+<!-- ================= ADMIN ================= -->
 
 <div id="adminPage" class="hidden">
 
 <header>
-<div class="header-inner">
 
-<div>
-<h1>🤖 Task Bot Admin Panel</h1>
-<p>সম্পূর্ণ Bot Control Center</p>
-</div>
+  <div class="header-inner">
 
-<button class="logout-btn" onclick="logout()">🚪 Logout</button>
+    <div>
+      <h1>🤖 Task Bot Super Admin</h1>
+      <p>300 Feature Control Center</p>
+    </div>
 
-</div>
+    <button class="logout"
+            onclick="logout()">
+      🚪 Logout
+    </button>
+
+  </div>
+
 </header>
 
 
 <div class="container">
 
-<!-- DASHBOARD -->
+<!-- ================= DASHBOARD ================= -->
 
 <div class="cards">
 
-<div class="card">
-<h3>👤 Total Users</h3>
-<strong id="usersCount">...</strong>
-</div>
+  <div class="card">
+    <h3>👤 Total Users</h3>
+    <strong id="usersCount">...</strong>
+  </div>
 
-<div class="card">
-<h3>📋 Total Tasks</h3>
-<strong id="tasksCount">...</strong>
-</div>
+  <div class="card">
+    <h3>📋 Total Tasks</h3>
+    <strong id="tasksCount">...</strong>
+  </div>
 
-<div class="card">
-<h3>⏳ Pending Submissions</h3>
-<strong id="submissionsCount">...</strong>
-</div>
+  <div class="card">
+    <h3>⏳ Pending Submissions</h3>
+    <strong id="submissionsCount">...</strong>
+  </div>
 
-<div class="card">
-<h3>💸 Pending Withdrawals</h3>
-<strong id="withdrawalsCount">...</strong>
-</div>
-
-</div>
-
-
-<!-- MENU -->
-
-<div class="menu">
-
-<button onclick="showSection('tasksSection')">
-📋 Task Management
-</button>
-
-<button onclick="alert('User Management পরে চালু করা হবে')">
-👤 User Management
-</button>
-
-<button onclick="alert('Task Submissions পরে চালু করা হবে')">
-📤 Task Submissions
-</button>
-
-<button onclick="alert('Withdrawals পরে চালু করা হবে')">
-💸 Withdrawals
-</button>
-
-<button onclick="alert('Notice System পরে চালু করা হবে')">
-📢 Send Notice
-</button>
-
-<button onclick="alert('Bot Settings পরে চালু করা হবে')">
-⚙️ Bot Settings
-</button>
+  <div class="card">
+    <h3>💸 Pending Withdrawals</h3>
+    <strong id="withdrawalsCount">...</strong>
+  </div>
 
 </div>
 
 
-<!-- TASK MANAGEMENT -->
+<!-- ================= FEATURE PANEL ================= -->
 
-<div id="tasksSection" class="section hidden">
+<div id="featurePanel"
+     class="panel hidden">
 
-<h2>📋 Task Management</h2>
+  <h2 id="featureTitle">Feature</h2>
 
-<div class="task-form">
+  <p id="featureDescription">
+    Feature control panel
+  </p>
 
-<h3>➕ নতুন Task যোগ করুন</h3>
-
-<input id="taskTitle" placeholder="Task Title">
-
-<textarea id="taskDescription"
-placeholder="Task Description"></textarea>
-
-<input id="taskReward"
-type="number"
-step="0.01"
-placeholder="Reward">
-
-<select id="taskStatus">
-<option value="active">Active</option>
-<option value="inactive">Inactive</option>
-</select>
-
-<button class="primary" onclick="addTask()">
-➕ Add Task
-</button>
+  <div id="featureContent"></div>
 
 </div>
 
 
-<div style="margin-top:25px">
+<!-- ================= TASK QUICK PANEL ================= -->
 
-<h3>📋 সব Task</h3>
+<div id="taskPanel"
+     class="panel hidden">
 
-<div id="taskList">
-⏳ Loading...
+  <h2>📋 Task Management</h2>
+
+  <input id="taskTitle"
+         placeholder="Task Title">
+
+  <textarea id="taskDescription"
+            placeholder="Task Description"></textarea>
+
+  <input id="taskReward"
+         type="number"
+         step="0.01"
+         placeholder="Reward">
+
+  <select id="taskStatus">
+
+    <option value="active">
+      Active
+    </option>
+
+    <option value="inactive">
+      Inactive
+    </option>
+
+  </select>
+
+  <div class="action-row">
+
+    <button class="primary"
+            onclick="addTask()">
+      ➕ Add Task
+    </button>
+
+    <button class="secondary"
+            onclick="loadTasks()">
+      🔄 Refresh
+    </button>
+
+  </div>
+
+  <div id="taskList">
+    Loading...
+  </div>
+
 </div>
 
+
+<!-- =========================================================
+     1-40 USER MANAGEMENT
+========================================================= -->
+
+<div class="category">
+
+<div class="category-title">
+👤 1. User Management — 40
 </div>
 
+<div class="feature-grid">
+
+<button class="feature-btn" onclick="feature(1,'👤 অল ইউজার লিস্ট')">👤 অল ইউজার লিস্ট</button>
+<button class="feature-btn" onclick="feature(2,'🟢 এক্টিভ ইউজার্স')">🟢 এক্টিভ ইউজার্স</button>
+<button class="feature-btn" onclick="feature(3,'🔴 ব্লক করা ইউজার্স')">🔴 ব্লক করা ইউজার্স</button>
+<button class="feature-btn" onclick="feature(4,'⏳ পেন্ডিং ভেরিফিকেশন')">⏳ পেন্ডিং ভেরিফিকেশন</button>
+<button class="feature-btn" onclick="feature(5,'🔍 ইউজার খুঁজুন')">🔍 ইউজার খুঁজুন</button>
+<button class="feature-btn" onclick="feature(6,'➕ নতুন ইউজার যোগ')">➕ নতুন ইউজার যোগ</button>
+<button class="feature-btn" onclick="feature(7,'✏️ ইউজার তথ্য এডিট')">✏️ ইউজার তথ্য এডিট</button>
+<button class="feature-btn" onclick="feature(8,'🗑️ ইউজার অ্যাকাউন্ট মুছুন')">🗑️ ইউজার অ্যাকাউন্ট মুছুন</button>
+<button class="feature-btn" onclick="feature(9,'🔑 ইউজার পাসওয়ার্ড রিসেট')">🔑 ইউজার পাসওয়ার্ড রিসেট</button>
+<button class="feature-btn" onclick="feature(10,'🔒 ইউজার আইডি লক')">🔒 ইউজার আইডি লক</button>
+<button class="feature-btn" onclick="feature(11,'🔓 ইউজার আইডি আনলক')">🔓 ইউজার আইডি আনলক</button>
+<button class="feature-btn" onclick="feature(12,'💰 ব্যালেন্স যোগ')">💰 ব্যালেন্স যোগ</button>
+<button class="feature-btn" onclick="feature(13,'➖ ব্যালেন্স কাটুন')">➖ ব্যালেন্স কাটুন</button>
+<button class="feature-btn" onclick="feature(14,'👑 VIP স্ট্যাটাস')">👑 VIP স্ট্যাটাস</button>
+<button class="feature-btn" onclick="feature(15,'🚫 Spam Flag')">🚫 Spam Flag</button>
+<button class="feature-btn" onclick="feature(16,'📜 Login History')">📜 Login History</button>
+<button class="feature-btn" onclick="feature(17,'🌐 IP Check')">🌐 IP Check</button>
+<button class="feature-btn" onclick="feature(18,'📱 Device Management')">📱 Device Management</button>
+<button class="feature-btn" onclick="feature(19,'✉️ Email Verification')">✉️ Email Verification</button>
+<button class="feature-btn" onclick="feature(20,'📞 Phone Verification')">📞 Phone Verification</button>
+<button class="feature-btn" onclick="feature(21,'🆔 KYC Verification')">🆔 KYC Verification</button>
+<button class="feature-btn" onclick="feature(22,'✅ KYC Approve')">✅ KYC Approve</button>
+<button class="feature-btn" onclick="feature(23,'❌ KYC Reject')">❌ KYC Reject</button>
+<button class="feature-btn" onclick="feature(24,'📊 Activity Report')">📊 Activity Report</button>
+<button class="feature-btn" onclick="feature(25,'🎁 User Bonus')">🎁 User Bonus</button>
+<button class="feature-btn" onclick="feature(26,'💬 Private Message')">💬 Private Message</button>
+<button class="feature-btn" onclick="feature(27,'🛡️ Sub Admin')">🛡️ Sub Admin</button>
+<button class="feature-btn" onclick="feature(28,'👥 User Groups')">👥 User Groups</button>
+<button class="feature-btn" onclick="feature(29,'🏆 Top Earners')">🏆 Top Earners</button>
+<button class="feature-btn" onclick="feature(30,'📉 Inactive Users')">📉 Inactive Users</button>
+<button class="feature-btn" onclick="feature(31,'🔄 Status Change')">🔄 Status Change</button>
+<button class="feature-btn" onclick="feature(32,'📌 User Pin')">📌 User Pin</button>
+<button class="feature-btn" onclick="feature(33,'📤 User Export')">📤 User Export</button>
+<button class="feature-btn" onclick="feature(34,'📥 User Import')">📥 User Import</button>
+<button class="feature-btn" onclick="feature(35,'⚠️ Warning Strike')">⚠️ Warning Strike</button>
+<button class="feature-btn" onclick="feature(36,'🚫 Warning Remove')">🚫 Warning Remove</button>
+<button class="feature-btn" onclick="feature(37,'🏷️ User Tag')">🏷️ User Tag</button>
+<button class="feature-btn" onclick="feature(38,'🛠️ User Settings')">🛠️ User Settings</button>
+<button class="feature-btn" onclick="feature(39,'🎂 Birthday Bonus')">🎂 Birthday Bonus</button>
+<button class="feature-btn" onclick="feature(40,'📍 Location Settings')">📍 Location Settings</button>
+
+</div>
 </div>
 
 
-<div class="section">
+<!-- =========================================================
+     41-80 TASK
+========================================================= -->
+
+<div class="category">
+
+<div class="category-title">
+📋 2. Task & Work Management — 40
+</div>
+
+<div class="feature-grid">
+
+<button class="feature-btn" onclick="openTasks()">📋 সব কাজের তালিকা</button>
+<button class="feature-btn" onclick="openTasks()">➕ নতুন কাজ যোগ করুন</button>
+<button class="feature-btn" onclick="feature(43,'✏️ কাজ এডিট')">✏️ কাজ এডিট</button>
+<button class="feature-btn" onclick="feature(44,'🗑️ কাজ মুছে ফেলুন')">🗑️ কাজ মুছে ফেলুন</button>
+<button class="feature-btn" onclick="feature(45,'⏳ Pending Tasks')">⏳ Pending Tasks</button>
+<button class="feature-btn" onclick="feature(46,'✅ Approved Tasks')">✅ Approved Tasks</button>
+<button class="feature-btn" onclick="feature(47,'❌ Rejected Tasks')">❌ Rejected Tasks</button>
+<button class="feature-btn" onclick="feature(48,'🔍 Proof Verification')">🔍 Proof Verification</button>
+<button class="feature-btn" onclick="feature(49,'📸 Screenshot Proof')">📸 Screenshot Proof</button>
+<button class="feature-btn" onclick="feature(50,'🎥 Video Task')">🎥 Video Task</button>
+<button class="feature-btn" onclick="feature(51,'📷 Instagram Task')">📷 Instagram Task</button>
+<button class="feature-btn" onclick="feature(52,'👍 Facebook Task')">👍 Facebook Task</button>
+<button class="feature-btn" onclick="feature(53,'📹 YouTube Task')">📹 YouTube Task</button>
+<button class="feature-btn" onclick="feature(54,'💬 Telegram Task')">💬 Telegram Task</button>
+<button class="feature-btn" onclick="feature(55,'🌐 Website Visit')">🌐 Website Visit</button>
+<button class="feature-btn" onclick="feature(56,'📱 App Task')">📱 App Task</button>
+<button class="feature-btn" onclick="feature(57,'⏱️ Task Timer')">⏱️ Task Timer</button>
+<button class="feature-btn" onclick="feature(58,'💵 Task Reward')">💵 Task Reward</button>
+<button class="feature-btn" onclick="feature(59,'🛑 Pause Task')">🛑 Pause Task</button>
+<button class="feature-btn" onclick="feature(60,'▶️ Resume Task')">▶️ Resume Task</button>
+<button class="feature-btn" onclick="feature(61,'📌 Pin Task')">📌 Pin Task</button>
+<button class="feature-btn" onclick="feature(62,'📊 Completion Report')">📊 Completion Report</button>
+<button class="feature-btn" onclick="feature(63,'📁 Categories')">📁 Categories</button>
+<button class="feature-btn" onclick="feature(64,'➕ New Category')">➕ New Category</button>
+<button class="feature-btn" onclick="feature(65,'🚨 Fake Proof')">🚨 Fake Proof</button>
+<button class="feature-btn" onclick="feature(66,'🔄 Auto Verify')">🔄 Auto Verify</button>
+<button class="feature-btn" onclick="feature(67,'🎯 Daily Limit')">🎯 Daily Limit</button>
+<button class="feature-btn" onclick="feature(68,'🔒 Lock Task')">🔒 Lock Task</button>
+<button class="feature-btn" onclick="feature(69,'🔓 Unlock Task')">🔓 Unlock Task</button>
+<button class="feature-btn" onclick="feature(70,'🏷️ Task Label')">🏷️ Task Label</button>
+<button class="feature-btn" onclick="feature(71,'📤 Task Export')">📤 Task Export</button>
+<button class="feature-btn" onclick="feature(72,'📥 Bulk Task Upload')">📥 Bulk Task Upload</button>
+<button class="feature-btn" onclick="feature(73,'🔄 Re-Approve')">🔄 Re-Approve</button>
+<button class="feature-btn" onclick="feature(74,'🎁 Bonus Task')">🎁 Bonus Task</button>
+<button class="feature-btn" onclick="feature(75,'⏱️ Task Duration')">⏱️ Task Duration</button>
+<button class="feature-btn" onclick="feature(76,'📈 Engagement')">📈 Engagement</button>
+<button class="feature-btn" onclick="feature(77,'📝 Instructions')">📝 Instructions</button>
+<button class="feature-btn" onclick="feature(78,'🖼️ Task Banner')">🖼️ Task Banner</button>
+<button class="feature-btn" onclick="feature(79,'❌ Fake Submission Ban')">❌ Fake Submission Ban</button>
+<button class="feature-btn" onclick="feature(80,'⚙️ Auto Approve')">⚙️ Auto Approve</button>
+
+</div>
+</div>
+
+
+<!-- =========================================================
+     81-120 PAYMENT
+========================================================= -->
+
+<div class="category">
+
+<div class="category-title">
+💸 3. Payment & Withdrawal — 40
+</div>
+
+<div class="feature-grid">
+
+<button class="feature-btn" onclick="feature(81,'💸 All Withdrawals')">💸 All Withdrawals</button>
+<button class="feature-btn" onclick="feature(82,'⏳ Pending Payments')">⏳ Pending Payments</button>
+<button class="feature-btn" onclick="feature(83,'✅ Approve Payment')">✅ Approve Payment</button>
+<button class="feature-btn" onclick="feature(84,'❌ Reject Payment')">❌ Reject Payment</button>
+<button class="feature-btn" onclick="feature(85,'💳 Bkash Gateway')">💳 Bkash Gateway</button>
+<button class="feature-btn" onclick="feature(86,'🟧 Nagad Gateway')">🟧 Nagad Gateway</button>
+<button class="feature-btn" onclick="feature(87,'🚀 Rocket Gateway')">🚀 Rocket Gateway</button>
+<button class="feature-btn" onclick="feature(88,'🌐 Crypto Settings')">🌐 Crypto Settings</button>
+<button class="feature-btn" onclick="feature(89,'🏦 Bank Transfer')">🏦 Bank Transfer</button>
+<button class="feature-btn" onclick="feature(90,'💲 Minimum Withdraw')">💲 Minimum Withdraw</button>
+<button class="feature-btn" onclick="feature(91,'🔝 Maximum Withdraw')">🔝 Maximum Withdraw</button>
+<button class="feature-btn" onclick="feature(92,'🏷️ Payment Fee')">🏷️ Payment Fee</button>
+<button class="feature-btn" onclick="feature(93,'📜 Transaction History')">📜 Transaction History</button>
+<button class="feature-btn" onclick="feature(94,'🔍 Transaction Check')">🔍 Transaction Check</button>
+<button class="feature-btn" onclick="feature(95,'🤖 Auto Payment')">🤖 Auto Payment</button>
+<button class="feature-btn" onclick="feature(96,'🛑 Manual Payment')">🛑 Manual Payment</button>
+<button class="feature-btn" onclick="feature(97,'➕ Payment Method')">➕ Payment Method</button>
+<button class="feature-btn" onclick="feature(98,'🗑️ Remove Method')">🗑️ Remove Method</button>
+<button class="feature-btn" onclick="feature(99,'🔒 Payment Pause')">🔒 Payment Pause</button>
+<button class="feature-btn" onclick="feature(100,'▶️ Payment Resume')">▶️ Payment Resume</button>
+<button class="feature-btn" onclick="feature(101,'📊 Daily Payment')">📊 Daily Payment</button>
+<button class="feature-btn" onclick="feature(102,'📉 Monthly Payment')">📉 Monthly Payment</button>
+<button class="feature-btn" onclick="feature(103,'📤 Payment Export')">📤 Payment Export</button>
+<button class="feature-btn" onclick="feature(104,'🧾 Receipt')">🧾 Receipt</button>
+<button class="feature-btn" onclick="feature(105,'⚠️ Suspicious Payment')">⚠️ Suspicious Payment</button>
+<button class="feature-btn" onclick="feature(106,'🔄 Refund')">🔄 Refund</button>
+<button class="feature-btn" onclick="feature(107,'💵 Admin Fund')">💵 Admin Fund</button>
+<button class="feature-btn" onclick="feature(108,'➕ Fund Deposit')">➕ Fund Deposit</button>
+<button class="feature-btn" onclick="feature(109,'➖ Fund Withdraw')">➖ Fund Withdraw</button>
+<button class="feature-btn" onclick="feature(110,'🏦 Gateway Balance')">🏦 Gateway Balance</button>
+<button class="feature-btn" onclick="feature(111,'⚙️ Payment Limits')">⚙️ Payment Limits</button>
+<button class="feature-btn" onclick="feature(112,'📩 Confirmation')">📩 Confirmation</button>
+<button class="feature-btn" onclick="feature(113,'🔔 Withdrawal Alert')">🔔 Withdrawal Alert</button>
+<button class="feature-btn" onclick="feature(114,'⏰ Processing Time')">⏰ Processing Time</button>
+<button class="feature-btn" onclick="feature(115,'🏷️ Tax Settings')">🏷️ Tax Settings</button>
+<button class="feature-btn" onclick="feature(116,'💳 Upay Gateway')">💳 Upay Gateway</button>
+<button class="feature-btn" onclick="feature(117,'📱 Mobile Recharge')">📱 Mobile Recharge</button>
+<button class="feature-btn" onclick="feature(118,'🎯 Withdraw PIN')">🎯 Withdraw PIN</button>
+<button class="feature-btn" onclick="feature(119,'📊 Payment Failure')">📊 Payment Failure</button>
+<button class="feature-btn" onclick="feature(120,'📝 Payment Note')">📝 Payment Note</button>
+
+</div>
+</div>
+
+
+<!-- =========================================================
+     121-150 REFERRAL
+========================================================= -->
+
+<div class="category">
+
+<div class="category-title">
+👥 4. Referral & Bonus — 30
+</div>
+
+<div class="feature-grid">
+
+<button class="feature-btn" onclick="feature(121,'👥 Referral Dashboard')">👥 Referral Dashboard</button>
+<button class="feature-btn" onclick="feature(122,'🎁 Referral Percentage')">🎁 Referral Percentage</button>
+<button class="feature-btn" onclick="feature(123,'🏆 Top Referrers')">🏆 Top Referrers</button>
+<button class="feature-btn" onclick="feature(124,'🔗 Referral Link')">🔗 Referral Link</button>
+<button class="feature-btn" onclick="feature(125,'💰 Instant Referral Bonus')">💰 Instant Referral Bonus</button>
+<button class="feature-btn" onclick="feature(126,'📈 Multi Level Referral')">📈 Multi Level Referral</button>
+<button class="feature-btn" onclick="feature(127,'🎁 Daily Bonus')">🎁 Daily Bonus</button>
+<button class="feature-btn" onclick="feature(128,'🎟️ Promo Code')">🎟️ Promo Code</button>
+<button class="feature-btn" onclick="feature(129,'📋 Active Promo')">📋 Active Promo</button>
+<button class="feature-btn" onclick="feature(130,'❌ Deactivate Promo')">❌ Deactivate Promo</button>
+<button class="feature-btn" onclick="feature(131,'🎁 Signup Bonus')">🎁 Signup Bonus</button>
+<button class="feature-btn" onclick="feature(132,'🎯 Target Bonus')">🎯 Target Bonus</button>
+<button class="feature-btn" onclick="feature(133,'💵 Monthly Salary')">💵 Monthly Salary</button>
+<button class="feature-btn" onclick="feature(134,'👑 Royalty Bonus')">👑 Royalty Bonus</button>
+<button class="feature-btn" onclick="feature(135,'🎡 Spin Settings')">🎡 Spin Settings</button>
+<button class="feature-btn" onclick="feature(136,'🎁 Spin Rewards')">🎁 Spin Rewards</button>
+<button class="feature-btn" onclick="feature(137,'🏆 Leaderboard Rewards')">🏆 Leaderboard Rewards</button>
+<button class="feature-btn" onclick="feature(138,'🔄 Commission Reset')">🔄 Commission Reset</button>
+<button class="feature-btn" onclick="feature(139,'📊 Referral Report')">📊 Referral Report</button>
+<button class="feature-btn" onclick="feature(140,'⚠️ Fake Referral Filter')">⚠️ Fake Referral Filter</button>
+<button class="feature-btn" onclick="feature(141,'🚫 Self Referral Block')">🚫 Self Referral Block</button>
+<button class="feature-btn" onclick="feature(142,'🎁 Festival Bonus')">🎁 Festival Bonus</button>
+<button class="feature-btn" onclick="feature(143,'🏷️ Custom Bonus')">🏷️ Custom Bonus</button>
+<button class="feature-btn" onclick="feature(144,'📜 Bonus History')">📜 Bonus History</button>
+<button class="feature-btn" onclick="feature(145,'👥 Team Limit')">👥 Team Limit</button>
+<button class="feature-btn" onclick="feature(146,'🏆 Monthly Contest')">🏆 Monthly Contest</button>
+<button class="feature-btn" onclick="feature(147,'🎁 Gift Management')">🎁 Gift Management</button>
+<button class="feature-btn" onclick="feature(148,'🎟️ Coupon History')">🎟️ Coupon History</button>
+<button class="feature-btn" onclick="feature(149,'🌟 Special Offers')">🌟 Special Offers</button>
+<button class="feature-btn" onclick="feature(150,'⚙️ Bonus Automation')">⚙️ Bonus Automation</button>
+
+</div>
+</div>
+
+
+<!-- =========================================================
+     151-175 DEPOSIT
+========================================================= -->
+
+<div class="category">
+
+<div class="category-title">
+📥 5. Deposit & Investment — 25
+</div>
+
+<div class="feature-grid">
+
+<button class="feature-btn" onclick="feature(151,'📥 All Deposits')">📥 All Deposits</button>
+<button class="feature-btn" onclick="feature(152,'⏳ Pending Deposit')">⏳ Pending Deposit</button>
+<button class="feature-btn" onclick="feature(153,'✅ Approve Deposit')">✅ Approve Deposit</button>
+<button class="feature-btn" onclick="feature(154,'❌ Reject Deposit')">❌ Reject Deposit</button>
+<button class="feature-btn" onclick="feature(155,'🏦 Admin Bank')">🏦 Admin Bank</button>
+<button class="feature-btn" onclick="feature(156,'📱 Merchant Number')">📱 Merchant Number</button>
+<button class="feature-btn" onclick="feature(157,'💵 Deposit Bonus')">💵 Deposit Bonus</button>
+<button class="feature-btn" onclick="feature(158,'📊 Deposit Report')">📊 Deposit Report</button>
+<button class="feature-btn" onclick="feature(159,'🔍 Manual Transaction')">🔍 Manual Transaction</button>
+<button class="feature-btn" onclick="feature(160,'🛑 Deposit Block')">🛑 Deposit Block</button>
+<button class="feature-btn" onclick="feature(161,'📜 Deposit Statement')">📜 Deposit Statement</button>
+<button class="feature-btn" onclick="feature(162,'💳 Auto Deposit')">💳 Auto Deposit</button>
+<button class="feature-btn" onclick="feature(163,'⚠️ Fake Transaction')">⚠️ Fake Transaction</button>
+<button class="feature-btn" onclick="feature(164,'📦 Investment Package')">📦 Investment Package</button>
+<button class="feature-btn" onclick="feature(165,'✏️ Edit Package')">✏️ Edit Package</button>
+<button class="feature-btn" onclick="feature(166,'🗑️ Delete Package')">🗑️ Delete Package</button>
+<button class="feature-btn" onclick="feature(167,'📈 Daily Profit')">📈 Daily Profit</button>
+<button class="feature-btn" onclick="feature(168,'⏱️ Package Duration')">⏱️ Package Duration</button>
+<button class="feature-btn" onclick="feature(169,'💰 Profit Distribution')">💰 Profit Distribution</button>
+<button class="feature-btn" onclick="feature(170,'🔄 Package Renewal')">🔄 Package Renewal</button>
+<button class="feature-btn" onclick="feature(171,'📊 Investor Report')">📊 Investor Report</button>
+<button class="feature-btn" onclick="feature(172,'🎁 Cashback')">🎁 Cashback</button>
+<button class="feature-btn" onclick="feature(173,'🧾 Deposit Invoice')">🧾 Deposit Invoice</button>
+<button class="feature-btn" onclick="feature(174,'🔒 Investment Pause')">🔒 Investment Pause</button>
+<button class="feature-btn" onclick="feature(175,'⚙️ Deposit Charges')">⚙️ Deposit Charges</button>
+
+</div>
+</div>
+
+
+<!-- =========================================================
+     176-205 SUPPORT
+========================================================= -->
+
+<div class="category">
+
+<div class="category-title">
+💬 6. Support & Communication — 30
+</div>
+
+<div class="feature-grid">
+
+<button class="feature-btn" onclick="feature(176,'📩 Support Tickets')">📩 Support Tickets</button>
+<button class="feature-btn" onclick="feature(177,'⏳ Open Tickets')">⏳ Open Tickets</button>
+<button class="feature-btn" onclick="feature(178,'✅ Closed Tickets')">✅ Closed Tickets</button>
+<button class="feature-btn" onclick="feature(179,'💬 Live Chat')">💬 Live Chat</button>
+<button class="feature-btn" onclick="feature(180,'✍️ Ticket Reply')">✍️ Ticket Reply</button>
+<button class="feature-btn" onclick="feature(181,'📢 Telegram Link')">📢 Telegram Link</button>
+<button class="feature-btn" onclick="feature(182,'💬 WhatsApp Support')">💬 WhatsApp Support</button>
+<button class="feature-btn" onclick="feature(183,'👥 Facebook Group')">👥 Facebook Group</button>
+<button class="feature-btn" onclick="feature(184,'📞 Helpline')">📞 Helpline</button>
+<button class="feature-btn" onclick="feature(185,'📧 Email Support')">📧 Email Support</button>
+<button class="feature-btn" onclick="feature(186,'❓ FAQ Add')">❓ FAQ Add</button>
+<button class="feature-btn" onclick="feature(187,'✏️ FAQ Edit')">✏️ FAQ Edit</button>
+<button class="feature-btn" onclick="feature(188,'🔔 Chat Support')">🔔 Chat Support</button>
+<button class="feature-btn" onclick="feature(189,'🤖 Chatbot Settings')">🤖 Chatbot Settings</button>
+<button class="feature-btn" onclick="feature(190,'📝 Contact Info')">📝 Contact Info</button>
+<button class="feature-btn" onclick="feature(191,'📜 Message History')">📜 Message History</button>
+<button class="feature-btn" onclick="feature(192,'⚠️ Complaint Box')">⚠️ Complaint Box</button>
+<button class="feature-btn" onclick="feature(193,'🚫 Chat Block')">🚫 Chat Block</button>
+<button class="feature-btn" onclick="feature(194,'🔓 Chat Unblock')">🔓 Chat Unblock</button>
+<button class="feature-btn" onclick="feature(195,'📁 Ticket Category')">📁 Ticket Category</button>
+<button class="feature-btn" onclick="feature(196,'📊 Support Performance')">📊 Support Performance</button>
+<button class="feature-btn" onclick="feature(197,'📌 Pin Ticket')">📌 Pin Ticket</button>
+<button class="feature-btn" onclick="feature(198,'📤 Ticket Export')">📤 Ticket Export</button>
+<button class="feature-btn" onclick="feature(199,'🌐 Help Center')">🌐 Help Center</button>
+<button class="feature-btn" onclick="feature(200,'📹 Tutorial')">📹 Tutorial</button>
+<button class="feature-btn" onclick="feature(201,'✍️ User Guide')">✍️ User Guide</button>
+<button class="feature-btn" onclick="feature(202,'🔔 Sound Alert')">🔔 Sound Alert</button>
+<button class="feature-btn" onclick="feature(203,'🕒 Support Hours')">🕒 Support Hours</button>
+<button class="feature-btn" onclick="feature(204,'🏷️ Ticket Priority')">🏷️ Ticket Priority</button>
+<button class="feature-btn" onclick="feature(205,'🧹 Old Chat Delete')">🧹 Old Chat Delete</button>
+
+</div>
+</div>
+
+
+<!-- =========================================================
+     206-230 NOTICE
+========================================================= -->
+
+<div class="category">
+
+<div class="category-title">
+📢 7. Notice & Content — 25
+</div>
+
+<div class="feature-grid">
+
+<button class="feature-btn" onclick="feature(206,'📢 Popup Notice')">📢 Popup Notice</button>
+<button class="feature-btn" onclick="feature(207,'✏️ Edit Notice')">✏️ Edit Notice</button>
+<button class="feature-btn" onclick="feature(208,'🗑️ Remove Notice')">🗑️ Remove Notice</button>
+<button class="feature-btn" onclick="feature(209,'📜 Marquee Notice')">📜 Marquee Notice</button>
+<button class="feature-btn" onclick="feature(210,'🖼️ Home Banner')">🖼️ Home Banner</button>
+<button class="feature-btn" onclick="feature(211,'🗑️ Delete Banner')">🗑️ Delete Banner</button>
+<button class="feature-btn" onclick="feature(212,'🔔 Push Notification')">🔔 Push Notification</button>
+<button class="feature-btn" onclick="feature(213,'✉️ Bulk Email')">✉️ Bulk Email</button>
+<button class="feature-btn" onclick="feature(214,'📱 Bulk SMS')">📱 Bulk SMS</button>
+<button class="feature-btn" onclick="feature(215,'📄 Privacy Policy')">📄 Privacy Policy</button>
+<button class="feature-btn" onclick="feature(216,'📜 Terms')">📜 Terms</button>
+<button class="feature-btn" onclick="feature(217,'ℹ️ About Us')">ℹ️ About Us</button>
+<button class="feature-btn" onclick="feature(218,'🎨 Theme Color')">🎨 Theme Color</button>
+<button class="feature-btn" onclick="feature(219,'🖼️ App Logo')">🖼️ App Logo</button>
+<button class="feature-btn" onclick="feature(220,'🔔 Notification Tone')">🔔 Notification Tone</button>
+<button class="feature-btn" onclick="feature(221,'📰 News Post')">📰 News Post</button>
+<button class="feature-btn" onclick="feature(222,'✏️ Edit News')">✏️ Edit News</button>
+<button class="feature-btn" onclick="feature(223,'🗑️ Delete News')">🗑️ Delete News</button>
+<button class="feature-btn" onclick="feature(224,'📌 Pin Notice')">📌 Pin Notice</button>
+<button class="feature-btn" onclick="feature(225,'🌐 Social Links')">🌐 Social Links</button>
+<button class="feature-btn" onclick="feature(226,'🖼️ Welcome Image')">🖼️ Welcome Image</button>
+<button class="feature-btn" onclick="feature(227,'📝 Footer Text')">📝 Footer Text</button>
+<button class="feature-btn" onclick="feature(228,'📢 Affiliate Notice')">📢 Affiliate Notice</button>
+<button class="feature-btn" onclick="feature(229,'💡 Tips Update')">💡 Tips Update</button>
+<button class="feature-btn" onclick="feature(230,'🛑 Maintenance Banner')">🛑 Maintenance Banner</button>
+
+</div>
+</div>
+
+
+<!-- =========================================================
+     231-270 SETTINGS
+========================================================= -->
+
+<div class="category">
+
+<div class="category-title">
+⚙️ 8. App Settings & Security — 40
+</div>
+
+<div class="feature-grid">
+
+<button class="feature-btn" onclick="feature(231,'⚙️ General Settings')">⚙️ General Settings</button>
+<button class="feature-btn" onclick="feature(232,'🛠️ Maintenance Mode')">🛠️ Maintenance Mode</button>
+<button class="feature-btn" onclick="feature(233,'🔒 2FA Security')">🔒 2FA Security</button>
+<button class="feature-btn" onclick="feature(234,'🔐 Admin Password')">🔐 Admin Password</button>
+<button class="feature-btn" onclick="feature(235,'🔑 Admin PIN')">🔑 Admin PIN</button>
+<button class="feature-btn" onclick="feature(236,'🌐 Domain Settings')">🌐 Domain Settings</button>
+<button class="feature-btn" onclick="feature(237,'🔌 API Keys')">🔌 API Keys</button>
+<button class="feature-btn" onclick="feature(238,'🛡️ Firewall')">🛡️ Firewall</button>
+<button class="feature-btn" onclick="feature(239,'🚫 IP Ban')">🚫 IP Ban</button>
+<button class="feature-btn" onclick="feature(240,'🔓 IP Unban')">🔓 IP Unban</button>
+<button class="feature-btn" onclick="feature(241,'🌐 Country Settings')">🌐 Country Settings</button>
+<button class="feature-btn" onclick="feature(242,'📲 App Version')">📲 App Version</button>
+<button class="feature-btn" onclick="feature(243,'🔄 Force Update')">🔄 Force Update</button>
+<button class="feature-btn" onclick="feature(244,'💾 Database Backup')">💾 Database Backup</button>
+<button class="feature-btn" onclick="feature(245,'🔄 Database Restore')">🔄 Database Restore</button>
+<button class="feature-btn" onclick="feature(246,'🧹 Cache Clear')">🧹 Cache Clear</button>
+<button class="feature-btn" onclick="feature(247,'📝 Activity Logs')">📝 Activity Logs</button>
+<button class="feature-btn" onclick="feature(248,'⚠️ Error Logs')">⚠️ Error Logs</button>
+<button class="feature-btn" onclick="feature(249,'⏱️ Session Timeout')">⏱️ Session Timeout</button>
+<button class="feature-btn" onclick="feature(250,'🛡️ Anti Fraud')">🛡️ Anti Fraud</button>
+<button class="feature-btn" onclick="feature(251,'🤖 Captcha')">🤖 Captcha</button>
+<button class="feature-btn" onclick="feature(252,'🔐 SSL Settings')">🔐 SSL Settings</button>
+<button class="feature-btn" onclick="feature(253,'📧 SMTP')">📧 SMTP</button>
+<button class="feature-btn" onclick="feature(254,'📱 SMS Gateway')">📱 SMS Gateway</button>
+<button class="feature-btn" onclick="feature(255,'🌐 CDN')">🌐 CDN</button>
+<button class="feature-btn" onclick="feature(256,'👥 Staff Permissions')">👥 Staff Permissions</button>
+<button class="feature-btn" onclick="feature(257,'➕ New Admin')">➕ New Admin</button>
+<button class="feature-btn" onclick="feature(258,'🗑️ Remove Admin')">🗑️ Remove Admin</button>
+<button class="feature-btn" onclick="feature(259,'🔄 Server Restart')">🔄 Server Restart</button>
+<button class="feature-btn" onclick="feature(260,'📊 Server Load')">📊 Server Load</button>
+<button class="feature-btn" onclick="feature(261,'💾 Auto Backup')">💾 Auto Backup</button>
+<button class="feature-btn" onclick="feature(262,'🛡️ VPN Detection')">🛡️ VPN Detection</button>
+<button class="feature-btn" onclick="feature(263,'📱 Root Check')">📱 Root Check</button>
+<button class="feature-btn" onclick="feature(264,'🌐 Webhook')">🌐 Webhook</button>
+<button class="feature-btn" onclick="feature(265,'🔐 Encryption')">🔐 Encryption</button>
+<button class="feature-btn" onclick="feature(266,'⚙️ Timezone')">⚙️ Timezone</button>
+<button class="feature-btn" onclick="feature(267,'💱 Currency')">💱 Currency</button>
+<button class="feature-btn" onclick="feature(268,'🌐 Languages')">🌐 Languages</button>
+<button class="feature-btn" onclick="feature(269,'🛑 Emergency Shutdown')">🛑 Emergency Shutdown</button>
+<button class="feature-btn" onclick="feature(270,'✅ System Health')">✅ System Health</button>
+
+</div>
+</div>
+
+
+<!-- =========================================================
+     271-300 REPORTS
+========================================================= -->
+
+<div class="category">
+
+<div class="category-title">
+📊 9. Reports & Miscellaneous — 30
+</div>
+
+<div class="feature-grid">
+
+<button class="feature-btn" onclick="feature(271,'📊 Daily Income')">📊 Daily Income</button>
+<button class="feature-btn" onclick="feature(272,'📈 Monthly Income')">📈 Monthly Income</button>
+<button class="feature-btn" onclick="feature(273,'📉 Annual Report')">📉 Annual Report</button>
+<button class="feature-btn" onclick="feature(274,'💰 Profit Calculator')">💰 Profit Calculator</button>
+<button class="feature-btn" onclick="feature(275,'👥 User Growth')">👥 User Growth</button>
+<button class="feature-btn" onclick="feature(276,'📊 Task Analytics')">📊 Task Analytics</button>
+<button class="feature-btn" onclick="feature(277,'💸 Payout Summary')">💸 Payout Summary</button>
+<button class="feature-btn" onclick="feature(278,'📊 Referral Network')">📊 Referral Network</button>
+<button class="feature-btn" onclick="feature(279,'📌 Custom Report')">📌 Custom Report</button>
+<button class="feature-btn" onclick="feature(280,'📤 PDF Report')">📤 PDF Report</button>
+<button class="feature-btn" onclick="feature(281,'📤 Excel Report')">📤 Excel Report</button>
+<button class="feature-btn" onclick="feature(282,'🔍 Audit Trail')">🔍 Audit Trail</button>
+<button class="feature-btn" onclick="feature(283,'🌟 User Feedback')">🌟 User Feedback</button>
+<button class="feature-btn" onclick="feature(284,'⭐ App Rating')">⭐ App Rating</button>
+<button class="feature-btn" onclick="feature(285,'🎯 Advertiser Panel')">🎯 Advertiser Panel</button>
+<button class="feature-btn" onclick="feature(286,'➕ Advertiser Add')">➕ Advertiser Add</button>
+<button class="feature-btn" onclick="feature(287,'💵 Ad Rate Chart')">💵 Ad Rate Chart</button>
+<button class="feature-btn" onclick="feature(288,'📊 Ad Impression')">📊 Ad Impression</button>
+<button class="feature-btn" onclick="feature(289,'🔗 API Connector')">🔗 API Connector</button>
+<button class="feature-btn" onclick="feature(290,'📦 Plugin Manager')">📦 Plugin Manager</button>
+<button class="feature-btn" onclick="feature(291,'📁 Media Manager')">📁 Media Manager</button>
+<button class="feature-btn" onclick="feature(292,'🗑️ File Delete')">🗑️ File Delete</button>
+<button class="feature-btn" onclick="feature(293,'✉️ Email Templates')">✉️ Email Templates</button>
+<button class="feature-btn" onclick="feature(294,'📱 SMS Templates')">📱 SMS Templates</button>
+<button class="feature-btn" onclick="feature(295,'🔄 Data Reset')">🔄 Data Reset</button>
+<button class="feature-btn" onclick="feature(296,'🏆 Achievement Badges')">🏆 Achievement Badges</button>
+<button class="feature-btn" onclick="feature(297,'🎁 Daily Gift')">🎁 Daily Gift</button>
+<button class="feature-btn" onclick="feature(298,'📊 Traffic Graph')">📊 Traffic Graph</button>
+<button class="feature-btn" onclick="feature(299,'🌐 Domain Alert')">🌐 Domain Alert</button>
+<button class="feature-btn" onclick="logout()">🔚 Admin Logout</button>
+
+</div>
+</div>
+
+
+<div class="panel">
 
 <h2>📊 System Status</h2>
 
-<div class="status" id="status">
-Dashboard লোড হচ্ছে...
+<div id="systemStatus"
+     class="status">
+Checking...
 </div>
 
 </div>
@@ -260,9 +902,9 @@ Dashboard লোড হচ্ছে...
 
 <script>
 
-/* ==============================
-SUPABASE
-============================== */
+/* =========================================================
+   SUPABASE
+========================================================= */
 
 const SUPABASE_URL =
 "https://mgqfnmoxwgwqdltyxuib.supabase.co";
@@ -272,431 +914,627 @@ const SUPABASE_KEY =
 
 const supabaseClient =
 window.supabase.createClient(
-SUPABASE_URL,
-SUPABASE_KEY
+  SUPABASE_URL,
+  SUPABASE_KEY
 );
 
 
-/* ==============================
-LOGIN
-============================== */
+/* =========================================================
+   LOGIN
+========================================================= */
 
 async function login(){
 
-const email =
-document.getElementById("email").value.trim();
+  const email =
+    document.getElementById("email").value.trim();
 
-const password =
-document.getElementById("password").value;
+  const password =
+    document.getElementById("password").value;
 
-const message =
-document.getElementById("loginMessage");
+  const msg =
+    document.getElementById("loginMessage");
 
-if(!email || !password){
-message.textContent="❌ Email এবং Password দিন।";
-return;
+  if(!email || !password){
+
+    msg.textContent =
+      "❌ Email এবং Password দিন।";
+
+    return;
+  }
+
+  msg.textContent =
+    "⏳ Login হচ্ছে...";
+
+  const {error} =
+    await supabaseClient.auth.signInWithPassword({
+      email:email,
+      password:password
+    });
+
+  if(error){
+
+    msg.textContent =
+      "❌ Login ব্যর্থ: "+error.message;
+
+    return;
+  }
+
+  msg.textContent="";
+
+  showAdmin();
 }
 
-message.textContent="⏳ Login হচ্ছে...";
 
-const {error} =
-await supabaseClient.auth.signInWithPassword({
-email,
-password
-});
-
-if(error){
-message.textContent="❌ Login ব্যর্থ: "+error.message;
-return;
-}
-
-message.textContent="";
-
-showAdmin();
-
-}
-
-
-/* ==============================
-LOGOUT
-============================== */
+/* =========================================================
+   LOGOUT
+========================================================= */
 
 async function logout(){
 
-await supabaseClient.auth.signOut();
+  await supabaseClient.auth.signOut();
 
-location.reload();
-
+  location.reload();
 }
 
 
-/* ==============================
-SHOW ADMIN
-============================== */
+/* =========================================================
+   SHOW ADMIN
+========================================================= */
 
 function showAdmin(){
 
-document
-.getElementById("loginPage")
-.classList.add("hidden");
+  document
+    .getElementById("loginPage")
+    .classList.add("hidden");
 
-document
-.getElementById("adminPage")
-.classList.remove("hidden");
+  document
+    .getElementById("adminPage")
+    .classList.remove("hidden");
 
-loadDashboard();
-
+  loadDashboard();
 }
 
 
-/* ==============================
-COUNT
-============================== */
+/* =========================================================
+   COUNT
+========================================================= */
 
 async function getCount(table,filter=""){
 
-const response =
-await fetch(
-`${SUPABASE_URL}/rest/v1/${table}?select=id${filter}`,
-{
-headers:{
-apikey:SUPABASE_KEY,
-Authorization:`Bearer ${SUPABASE_KEY}`
+  const response =
+    await fetch(
+      `${SUPABASE_URL}/rest/v1/${table}?select=id${filter}`,
+      {
+        headers:{
+          apikey:SUPABASE_KEY,
+          Authorization:`Bearer ${SUPABASE_KEY}`
+        }
+      }
+    );
+
+  if(!response.ok){
+
+    throw new Error(
+      table+" database error"
+    );
+  }
+
+  const data =
+    await response.json();
+
+  return data.length;
 }
-});
-
-if(!response.ok){
-throw new Error(table+" error");
-}
-
-const data=await response.json();
-
-return data.length;
-
-}
 
 
-/* ==============================
-DASHBOARD
-============================== */
+/* =========================================================
+   DASHBOARD
+========================================================= */
 
 async function loadDashboard(){
 
-try{
+  try{
 
-const users =
-await getCount("users");
+    const users =
+      await getCount("users");
 
-const tasks =
-await getCount("tasks");
+    const tasks =
+      await getCount("tasks");
 
-const submissions =
-await getCount(
-"task_submissions",
-"&status=eq.pending"
-);
+    const submissions =
+      await getCount(
+        "task_submissions",
+        "&status=eq.pending"
+      );
 
-const withdrawals =
-await getCount(
-"withdrawals",
-"&status=eq.pending"
-);
+    const withdrawals =
+      await getCount(
+        "withdrawals",
+        "&status=eq.pending"
+      );
 
-document.getElementById("usersCount")
-.textContent=users;
+    document
+      .getElementById("usersCount")
+      .textContent=users;
 
-document.getElementById("tasksCount")
-.textContent=tasks;
+    document
+      .getElementById("tasksCount")
+      .textContent=tasks;
 
-document.getElementById("submissionsCount")
-.textContent=submissions;
+    document
+      .getElementById("submissionsCount")
+      .textContent=submissions;
 
-document.getElementById("withdrawalsCount")
-.textContent=withdrawals;
+    document
+      .getElementById("withdrawalsCount")
+      .textContent=withdrawals;
 
-document.getElementById("status")
-.textContent=
-"✅ Database connection successful.";
+    document
+      .getElementById("systemStatus")
+      .textContent=
+      "✅ Supabase Database Connected";
 
-}catch(error){
+  }catch(error){
 
-console.error(error);
+    console.error(error);
 
-document.getElementById("status")
-.textContent=
-"❌ Database error. RLS/Policy পরীক্ষা করুন.";
-
-}
-
-}
-
-
-/* ==============================
-SHOW SECTION
-============================== */
-
-function showSection(id){
-
-document
-.getElementById(id)
-.classList.remove("hidden");
-
-loadTasks();
-
+    document
+      .getElementById("systemStatus")
+      .textContent=
+      "❌ Database Error: "+error.message;
+  }
 }
 
 
-/* ==============================
-ADD TASK
-============================== */
+/* =========================================================
+   FEATURE PANEL
+========================================================= */
+
+function feature(number,title){
+
+  const panel =
+    document.getElementById(
+      "featurePanel"
+    );
+
+  const titleBox =
+    document.getElementById(
+      "featureTitle"
+    );
+
+  const description =
+    document.getElementById(
+      "featureDescription"
+    );
+
+  const content =
+    document.getElementById(
+      "featureContent"
+    );
+
+  panel.classList.remove("hidden");
+
+  titleBox.textContent =
+    number+". "+title;
+
+  description.textContent =
+    "এই Feature-এর Control Panel";
+
+  content.innerHTML=`
+
+    <input id="featureInput"
+           placeholder="প্রয়োজনীয় তথ্য লিখুন">
+
+    <textarea id="featureNote"
+              placeholder="Note / Description"></textarea>
+
+    <div class="action-row">
+
+      <button class="primary"
+              onclick="runFeature(${number})">
+        ▶️ Action চালান
+      </button>
+
+      <button class="secondary"
+              onclick="closeFeature()">
+        ✖️ Close
+      </button>
+
+    </div>
+
+    <div id="featureResult"
+         class="result">
+      Ready.
+    </div>
+  `;
+
+  window.scrollTo({
+    top:panel.offsetTop-10,
+    behavior:"smooth"
+  });
+}
+
+
+/* =========================================================
+   FEATURE ACTION
+========================================================= */
+
+function runFeature(number){
+
+  const input =
+    document.getElementById(
+      "featureInput"
+    ).value;
+
+  const note =
+    document.getElementById(
+      "featureNote"
+    ).value;
+
+  const result =
+    document.getElementById(
+      "featureResult"
+    );
+
+  result.textContent =
+    "✅ Feature #"+number+
+    " Action চালু হয়েছে.\n\n"+
+    "Input: "+(input || "নেই")+
+    "\nNote: "+(note || "নেই");
+
+}
+
+
+/* =========================================================
+   CLOSE FEATURE
+========================================================= */
+
+function closeFeature(){
+
+  document
+    .getElementById("featurePanel")
+    .classList.add("hidden");
+}
+
+
+/* =========================================================
+   OPEN TASKS
+========================================================= */
+
+function openTasks(){
+
+  const panel =
+    document.getElementById(
+      "taskPanel"
+    );
+
+  panel.classList.remove("hidden");
+
+  loadTasks();
+
+  window.scrollTo({
+    top:panel.offsetTop-10,
+    behavior:"smooth"
+  });
+}
+
+
+/* =========================================================
+   ADD TASK
+========================================================= */
 
 async function addTask(){
 
-const title =
-document.getElementById("taskTitle").value.trim();
+  const title =
+    document
+      .getElementById("taskTitle")
+      .value.trim();
 
-const description =
-document.getElementById("taskDescription").value.trim();
+  const description =
+    document
+      .getElementById("taskDescription")
+      .value.trim();
 
-const reward =
-document.getElementById("taskReward").value;
+  const reward =
+    document
+      .getElementById("taskReward")
+      .value;
 
-const status =
-document.getElementById("taskStatus").value;
+  const status =
+    document
+      .getElementById("taskStatus")
+      .value;
 
-if(!title || !description || !reward){
+  if(!title ||
+     !description ||
+     !reward){
 
-alert("❌ সব তথ্য পূরণ করুন।");
+    alert(
+      "❌ সব তথ্য পূরণ করুন।"
+    );
 
-return;
+    return;
+  }
 
+  const {
+    data:{user}
+  } =
+    await supabaseClient
+      .auth
+      .getUser();
+
+  if(!user){
+
+    alert(
+      "❌ Admin Login প্রয়োজন।"
+    );
+
+    return;
+  }
+
+  const {error} =
+    await supabaseClient
+      .from("tasks")
+      .insert({
+        title:title,
+        description:description,
+        reward:Number(reward),
+        status:status
+      });
+
+  if(error){
+
+    alert(
+      "❌ Task যোগ হয়নি:\n"+
+      error.message
+    );
+
+    return;
+  }
+
+  alert(
+    "✅ Task সফলভাবে যোগ হয়েছে।"
+  );
+
+  document
+    .getElementById("taskTitle")
+    .value="";
+
+  document
+    .getElementById("taskDescription")
+    .value="";
+
+  document
+    .getElementById("taskReward")
+    .value="";
+
+  loadTasks();
+  loadDashboard();
 }
 
-const {
-data:{user}
-} =
-await supabaseClient.auth.getUser();
 
-if(!user){
-
-alert("❌ Admin Login প্রয়োজন।");
-
-return;
-
-}
-
-const {error} =
-await supabaseClient
-.from("tasks")
-.insert({
-title:title,
-description:description,
-reward:Number(reward),
-status:status
-});
-
-if(error){
-
-alert("❌ Task যোগ হয়নি: "+error.message);
-
-return;
-
-}
-
-alert("✅ Task সফলভাবে যোগ হয়েছে।");
-
-document.getElementById("taskTitle").value="";
-document.getElementById("taskDescription").value="";
-document.getElementById("taskReward").value="";
-
-loadTasks();
-loadDashboard();
-
-}
-
-
-/* ==============================
-LOAD TASKS
-============================== */
+/* =========================================================
+   LOAD TASKS
+========================================================= */
 
 async function loadTasks(){
 
-const taskList =
-document.getElementById("taskList");
+  const list =
+    document.getElementById(
+      "taskList"
+    );
 
-taskList.innerHTML="⏳ Loading...";
+  list.innerHTML =
+    "⏳ Loading...";
 
-const {
-data,
-error
-} =
-await supabaseClient
-.from("tasks")
-.select("*")
-.order("id",{ascending:false});
+  const {
+    data,
+    error
+  } =
+    await supabaseClient
+      .from("tasks")
+      .select("*")
+      .order(
+        "id",
+        {ascending:false}
+      );
 
-if(error){
+  if(error){
 
-taskList.innerHTML=
-"❌ Task load হয়নি: "+error.message;
+    list.innerHTML =
+      "❌ Task load হয়নি: "+
+      error.message;
 
-return;
+    return;
+  }
 
+  if(!data ||
+     data.length===0){
+
+    list.innerHTML =
+      "📭 কোনো Task নেই।";
+
+    return;
+  }
+
+  list.innerHTML="";
+
+  data.forEach(task=>{
+
+    const div =
+      document.createElement("div");
+
+    div.className="task";
+
+    div.innerHTML=`
+
+      <h3>
+        📌 ${escapeHtml(task.title)}
+      </h3>
+
+      <p>
+        ${escapeHtml(
+          task.description
+        )}
+      </p>
+
+      <p>
+        💰 Reward:
+        <b>${task.reward}</b>
+      </p>
+
+      <p>
+        📌 Status:
+        <b>${task.status}</b>
+      </p>
+
+      <div class="task-actions">
+
+        <button class="success"
+          onclick="toggleTask(
+            '${task.id}',
+            '${task.status}'
+          )">
+
+          ${
+            task.status==="active"
+            ? "🔴 Deactivate"
+            : "🟢 Activate"
+          }
+
+        </button>
+
+        <button class="danger"
+          onclick="deleteTask(
+            '${task.id}'
+          )">
+
+          🗑️ Delete
+
+        </button>
+
+      </div>
+    `;
+
+    list.appendChild(div);
+
+  });
 }
 
-if(!data || data.length===0){
 
-taskList.innerHTML=
-"কোনো Task নেই।";
+/* =========================================================
+   TOGGLE TASK
+========================================================= */
 
-return;
+async function toggleTask(
+  id,
+  status
+){
 
-}
+  const newStatus =
+    status==="active"
+    ? "inactive"
+    : "active";
 
-taskList.innerHTML="";
+  const {error} =
+    await supabaseClient
+      .from("tasks")
+      .update({
+        status:newStatus
+      })
+      .eq("id",id);
 
-data.forEach(task=>{
+  if(error){
 
-const div =
-document.createElement("div");
+    alert(
+      "❌ Status পরিবর্তন হয়নি:\n"+
+      error.message
+    );
 
-div.className="task";
+    return;
+  }
 
-div.innerHTML=`
-
-<h3>📌 ${escapeHtml(task.title)}</h3>
-
-<p>${escapeHtml(task.description)}</p>
-
-<p><b>💰 Reward:</b> ${task.reward}</p>
-
-<p><b>📌 Status:</b> ${task.status}</p>
-
-<div class="task-actions">
-
-<button class="success"
-onclick="toggleTask('${task.id}','${task.status}')">
-${task.status==="active" ? "🔴 Deactivate" : "🟢 Activate"}
-</button>
-
-<button class="danger"
-onclick="deleteTask('${task.id}')">
-🗑️ Delete
-</button>
-
-</div>
-`;
-
-taskList.appendChild(div);
-
-});
-
+  loadTasks();
+  loadDashboard();
 }
 
 
-/* ==============================
-TOGGLE TASK
-============================== */
-
-async function toggleTask(id,status){
-
-const newStatus =
-status==="active"
-? "inactive"
-: "active";
-
-const {error} =
-await supabaseClient
-.from("tasks")
-.update({status:newStatus})
-.eq("id",id);
-
-if(error){
-
-alert("❌ Status পরিবর্তন হয়নি: "+error.message);
-
-return;
-
-}
-
-loadTasks();
-
-}
-
-
-/* ==============================
-DELETE TASK
-============================== */
+/* =========================================================
+   DELETE TASK
+========================================================= */
 
 async function deleteTask(id){
 
-if(!confirm("এই Task মুছে ফেলতে চান?")){
+  if(!confirm(
+    "এই Task মুছে ফেলতে চান?"
+  )){
 
-return;
+    return;
+  }
 
+  const {error} =
+    await supabaseClient
+      .from("tasks")
+      .delete()
+      .eq("id",id);
+
+  if(error){
+
+    alert(
+      "❌ Task delete হয়নি:\n"+
+      error.message
+    );
+
+    return;
+  }
+
+  alert(
+    "✅ Task deleted."
+  );
+
+  loadTasks();
+  loadDashboard();
 }
 
-const {error} =
-await supabaseClient
-.from("tasks")
-.delete()
-.eq("id",id);
 
-if(error){
-
-alert("❌ Task delete হয়নি: "+error.message);
-
-return;
-
-}
-
-alert("✅ Task deleted.");
-
-loadTasks();
-loadDashboard();
-
-}
-
-
-/* ==============================
-ESCAPE HTML
-============================== */
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
 
 function escapeHtml(value){
 
-return String(value)
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
-
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
 
-/* ==============================
-CHECK SESSION
-============================== */
+/* =========================================================
+   SESSION CHECK
+========================================================= */
 
 async function checkSession(){
 
-const {
-data:{session}
-} =
-await supabaseClient.auth.getSession();
+  const {
+    data:{session}
+  } =
+    await supabaseClient
+      .auth
+      .getSession();
 
-if(session){
+  if(session){
 
-showAdmin();
+    showAdmin();
+
+  }
 
 }
-
-}
-
 
 checkSession();
 
 </script>
 
 </body>
-</html>
+  </html>
