@@ -3,10 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Task Bot Admin Panel</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f4f7fb;
+            color: #222;
+        }
+
+        header {
+            background: linear-gradient(135deg, #6c5ce7, #0984e3);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 24px;
+        }
+
+        header p {
+            margin-top: 6px;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .card h3 {
+            font-size: 15px;
+            color: #666;
+        }
+
+        .card strong {
+            display: block;
+            font-size: 28px;
+            margin-top: 8px;
+        }
+
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 12px;
+        }
+
+        .menu button {
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.07);
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .menu button:hover {
+            transform: translateY(-2px);
+        }
+
+        .section {
+            background: white;
+            margin-top: 25px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+
+        .section h2 {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
+
 <body>
+
+<header>
     <h1>🤖 Task Bot Admin Panel</h1>
-    <p>Admin Panel চালু হয়েছে ✅</p>
+    <p>সম্পূর্ণ Bot Control Center</p>
+</header>
+
+<div class="container">
+
+    <div class="cards">
+
+        <div class="card">
+            <h3>👤 Total Users</h3>
+            <strong>0</strong>
+        </div>
+
+        <div class="card">
+            <h3>📋 Total Tasks</h3>
+            <strong>0</strong>
+        </div>
+
+        <div class="card">
+            <h3>⏳ Pending Submissions</h3>
+            <strong>0</strong>
+        </div>
+
+        <div class="card">
+            <h3>💸 Pending Withdrawals</h3>
+            <strong>0</strong>
+        </div>
+
+    </div>
+
+    <div class="menu">
+
+        <button>📋 Task Management</button>
+        <button>👤 User Management</button>
+        <button>📤 Task Submissions</button>
+        <button>💸 Withdrawals</button>
+        <button>📢 Send Notice</button>
+        <button>⚙️ Bot Settings</button>
+
+    </div>
+
+    <div class="section">
+        <h2>📊 Admin Dashboard</h2>
+        <p>
+            এখান থেকে পরে তোমার পুরো Telegram Bot নিয়ন্ত্রণ করা যাবে।
+        </p>
+    </div>
+
+</div>
+
 </body>
 </html>
